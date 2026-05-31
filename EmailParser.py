@@ -1,5 +1,5 @@
 from pathlib import Path
-
+import json
 from Email import Email
 
 
@@ -49,7 +49,12 @@ class EmailParser:
                 return true_key
         return None
     def _parse_json(self, path: Path): #"парсит json файлы
-        ...
+        try:
+            data = json.loads(path.read_text(encoding='utf-8'))
+        except json.JSONDecodeError as e:
+            return self._unreadable(path, "json")
+        return Email(path, "json", subject=data.get("subject"), who_sent=data.get("from"),  text=data.get("body"))
+
     def _unreadable(self, path, format): #если файл нечитаем просто возвращает объект email с пометкой о нечитаемости, форматом и остальными пустыми атрибутами
         return Email(path, format, is_readable=False)
 
