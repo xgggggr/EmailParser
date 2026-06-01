@@ -99,7 +99,7 @@ from EmailParser import EmailParser
         )
     ]
 )
-def test_email_parser(tmp_path, content, expected_subject, expected_who_sent, expected_sent_to, expected_text):
+def test_email_parser(tmp_path, content, expected_subject, expected_who_sent, expected_sent_to, expected_text):#проверка корректного парсинга
     file_path = tmp_path / "lydka.txt"
     file_path.write_text(content, encoding="utf-8")
     parser = EmailParser()
@@ -123,7 +123,7 @@ def test_email_parser(tmp_path, content, expected_subject, expected_who_sent, ex
      ("unknown.abc", b"some unknown data", True, "unknown", False),
     ],
 )
-def test_email_parser_format_and_readability(tmp_path, file_name, content, use_bytes, expected_format, expected_is_readable,):
+def test_email_parser_format_and_readability(tmp_path, file_name, content, use_bytes, expected_format, expected_is_readable,):#проверка читаемости при определенных форматах
     file_path = tmp_path / file_name
     if use_bytes:
         file_path.write_bytes(content)
@@ -136,7 +136,7 @@ def test_email_parser_format_and_readability(tmp_path, file_name, content, use_b
     assert email.is_readable is expected_is_readable
 
 
-def test_email_parser_valid_json(tmp_path):
+def test_email_parser_valid_json(tmp_path):#проверка корректного парсинга валидного JSON писем
     file_path = tmp_path / "mail.json"
     file_path.write_text('{"subject": "JSON subject", "from": "Lolya", "body": "Body"}', encoding="utf-8",)
     parser = EmailParser()
@@ -149,7 +149,7 @@ def test_email_parser_valid_json(tmp_path):
     assert email.is_readable is True
 
 
-def test_email_parser_invalid_json(tmp_path):
+def test_email_parser_invalid_json(tmp_path):#проверка корректного парсинга порвежденного JSON файла
     file_path = tmp_path / "broken.json"
     file_path.write_text('{"subject": "Broken", "from": "Ivan", ', encoding="utf-8",)
     parser = EmailParser()

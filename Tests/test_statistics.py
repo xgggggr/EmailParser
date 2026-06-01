@@ -1,12 +1,12 @@
 from Statistics import Statistics
 
 
-def test_statistics_empty():
+def test_statistics_empty():#проверка поведения программы при отсутствии обработаныых писем
     statistics = Statistics()
     assert statistics.get_summary() == "Новых писем не поступило :("
 
 
-def test_statistics_one_record():
+def test_statistics_one_record():#проверка записи статистики для одной категории
     statistics = Statistics()
     statistics.record_statistic("spam")
     assert statistics.total_count == 1
@@ -14,14 +14,14 @@ def test_statistics_one_record():
     assert statistics.counter["spam"] == 1
 
 
-def test_statistics_non_readable():
+def test_statistics_non_readable():#проверка учета нечитаемых писем
     statistics = Statistics()
     statistics.record_statistic("corrupted", False)
     assert statistics.non_readable_count == 1
     assert statistics.total_count == 1
 
 
-def test_statistics_summ():
+def test_statistics_summ():#проверка корректности итогового отчета по категориям
     statistics = Statistics()
     statistics.record_statistic("spam")
     statistics.record_statistic("access_control")
