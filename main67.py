@@ -4,7 +4,7 @@ from Sorter import Sorter
 from Statistics import Statistics
 from pathlib import Path
 import logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', handlers=[logging.FileHandler("logfile.log", encoding="utf-8", mode="w"), logging.StreamHandler()])
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', handlers=[logging.StreamHandler()])
 logger = logging.getLogger(__name__)
 class Main:
     def __init__(self, inbox, output):
