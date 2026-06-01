@@ -1,5 +1,3 @@
-from idlelib.iomenu import encoding
-
 import pytest
 
 from Sorter import Sorter

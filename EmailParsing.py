@@ -1,9 +1,10 @@
 from pathlib import Path
 import json
 from Email import Email
+import logging
+logger = logging.getLogger(__name__)
 
-
-class EmailParser:
+class EmailParsing:
     HEAD_NORMALISER = {"subject":["subject", "tema", "тема"], "who_sent":["from", "ot kogo", "от кого"], "sent_to": ["komu", "to", "кому"]}
     def parse(self, path: Path):
         try:
@@ -13,11 +14,15 @@ class EmailParser:
             elif format_of_email == "json":
                 return self._parse_json(path)
             elif format_of_email in ["jpeg", "jpg", "png", "gif"]:
+                logger.warning(f"Файл '{path.name}' является изображением и не может быть прочитан как письмо")
                 return self._unreadable(path, "image")
             elif format_of_email == "bin":
+                logger.warning(f"Файл '{path.name}' является бинарным и не может быть прочитан как письмо")
                 return self._unreadable(path, "binary")
+            logger.warning(f"У файла '{path.name}' неизвестный формат, не может быть прочитан как письмо")
             return self._unreadable(path, "unknown")
         except Exception as e:
+            logger.error(f"Не удалось прочитать файл '{path.name}': {e}")
             return self._unreadable(path, "unknown")
     def _parse_txt(self, path: Path): #парсит текстовый файл
         content = path.read_text(encoding='utf-8')
@@ -52,6 +57,7 @@ class EmailParser:
         try:
             data = json.loads(path.read_text(encoding='utf-8'))
         except json.JSONDecodeError as e:
+            logger.error(f"Файл '{path.name}' содержит некорректный JSON: {e}")
             return self._unreadable(path, "json")
         return Email(path, "json", subject=data.get("subject"), who_sent=data.get("from"),  text=data.get("body"))
 

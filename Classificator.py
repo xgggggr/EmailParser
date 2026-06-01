@@ -1,3 +1,5 @@
+import logging
+logger = logging.getLogger(__name__)
 class Classificator:
     CATEGORIES = {"spam": ["перейдите по ссылке","заблокирован", "истекает", "выиграли", "введите логин и пароль", "акция", "скидка", "только сегодня", "верификация", "по ссылке", "победител", "приз", "данные банковской карты", "внимание!", "розыгрыш" ],
                   "critical_incidents": ["инцидент", "критичный", "критический", "ошибку 500", "ошибка 500", "затронуто", "срочно", "не отвечает", "всех", "массовый", "сбой", "падает"],
@@ -13,6 +15,7 @@ class Classificator:
     CORRUPTED_CATEGORY = "corrupted"
     def categorise(self, email):
         if not email.is_readable:
+            logger.warning(f"Письмо '{email.source.name}' нечитаемо")
             return Classificator.CORRUPTED_CATEGORY
         if email.subject is None:
             subject = ""
@@ -33,6 +36,7 @@ class Classificator:
             if c > 0:
                 score[category] = c
         if not score:
+            logger.info(f"Письмо '{email.source.name}' не совпало ни с одной категорией")
             return self.UNKNOWN_CATEGORY
         max_c = max(score.values())
         result = [i for i in score if score[i] == max_c ]
@@ -42,4 +46,5 @@ class Classificator:
             for i in self.PRIORITY:
                 if i in result:
                     return i
+        logger.info(f"Письму '{email.source.name}' не удалось присвоить категорию")
         return self.UNKNOWN_CATEGORY
