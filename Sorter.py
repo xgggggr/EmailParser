@@ -33,7 +33,6 @@ class Sorter:
             logger.info(f"Файл '{file_path.name}' перемещён в '{category}' с переименованием в '{new_path.name}'")
         else:
             shutil.move(file_path, new_path)
-            logger.info(f"Файл '{file_path.name}' перемещён в категорию '{category}'")
         return {"status": "success",
                 "file": file_path.name,
                 "path": new_path,
