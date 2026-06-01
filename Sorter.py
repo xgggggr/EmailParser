@@ -1,6 +1,7 @@
 from pathlib import Path
 import shutil
-
+import logging
+logger = logging.getLogger(__name__)
 class Sorter:
     def __init__(self, res_dir):
         self.res_dir = Path(res_dir)
@@ -9,6 +10,7 @@ class Sorter:
     def sort(self, file_path, category):
         file_path = Path(file_path)
         if not file_path.exists():
+            logger.error(f"Файл '{file_path}' не найден, перемещение невозможно")
             return {"status": "error",
             "file": str(file_path),
             "category": category,
@@ -28,8 +30,10 @@ class Sorter:
                     shutil.move(file_path, new_path)
                     flag = False
                 n += 1
+            logger.info(f"Файл '{file_path.name}' перемещён в '{category}' с переименованием в '{new_path.name}'")
         else:
             shutil.move(file_path, new_path)
+            logger.info(f"Файл '{file_path.name}' перемещён в категорию '{category}'")
         return {"status": "success",
                 "file": file_path.name,
                 "path": new_path,
